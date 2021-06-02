@@ -1,0 +1,9 @@
+[2021-05-19 13:15:28.645] [INFO] - [main] top.cliffside.server.EchoServerHandler - Usage : EchoServer<port>
+[2021-05-19 15:59:37.921] [INFO] - [main] top.cliffside.server.EchoServerHandler - Usage : EchoServer<port>
+[2021-05-19 16:00:11.840] [INFO] - [main] top.cliffside.server.EchoServerHandler - Usage : EchoServer<port>
+[2021-05-19 16:03:17.656] [INFO] - [main] top.cliffside.server.EchoServerHandler - Usage : EchoServer<port>
+[2021-05-19 16:03:39.525] [INFO] - [main] top.cliffside.server.EchoServerHandler - Usage : EchoServer<port>
+[2021-05-19 16:04:32.023] [INFO] - [main] top.cliffside.server.EchoServerHandler - Usage : EchoServer<port>
+[2021-05-19 16:05:14.767] [INFO] - [main] top.cliffside.server.EchoServerHandler - server starting.....
+[2021-05-19 16:05:30.085] [INFO] - [main] top.cliffside.server.EchoServerHandler - server starting.....
+[2021-05-19 16:05:31.328] [INFO] - [main] top.cliffside.server.EchoServerHandler - top.cliffside.server.EchoServer started and listening for connections on /0:0:0:0:0:0:0:0:20000
