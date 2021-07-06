@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="my-blog-generator-config" targetRuntime="MyBatis3">
+        <!-- 生成的Java文件的编码 -->
+        <property name="javaFileEncoding" value="utf-8"/>
+        <!-- 格式化java代码 -->
+        <property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
+        <!-- 格式化XML代码 -->
+        <property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <!--创建Java类时对注释进行控制-->
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <!--数据库地址及登陆账号密码 改成你自己的配置-->
+        <jdbcConnection
+                driverClass="com.mysql.cj.jdbc.Driver"
+                connectionURL="jdbc:mysql://192.168.177.181:3306/topo?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;serverTimezone=UTC"
+                userId="root"
+                password="glimmer">
+        </jdbcConnection>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+        <!--生成实体类设置-->
+        <javaModelGenerator targetPackage="com.endsystem.pojo" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!--生成Mapper文件设置-->
+        <sqlMapGenerator targetPackage="dao" targetProject="src/main/resources/com/endsystem/dao">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <!--生成Dao类设置-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.endsystem.dao"
+                             targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+        <!--需要自动生成代码的表及对应的类名设置-->
+        <table tableName="portInfo" domainObjectName="PortInfo"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+        </table>
+        <!--        需要自动生成代码的表及对应的类名设置-->
+        <table tableName="switchDesc" domainObjectName="SwitchDesc"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+        </table>
+    </context>
+
+<!--&lt;!&ndash;        需要自动生成代码的表及对应的类名设置&ndash;&gt;-->
+<!--                <table tableName="tb_blog_tag_relation" domainObjectName="BlogTagRelation"-->
+<!--                       enableCountByExample="false"-->
+<!--                       enableUpdateByExample="false"-->
+<!--                       enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">-->
+<!--                </table>-->
+<!--        需要注意的是，在代码生成后需要在 dao 层下的 BlogTagMapper 接口类和 BlogTagRelationMapper 接口类上
+        添加 @Mapper 注解以将其注册到 IOC 容器中以供后续调用（如果已经在主类上添加 @MapperScan 注解这一步可以省略），
+        生成的 Mapper 文件也需要对应的修改，因为使用的是软删除设计，所以需要在生成的 SQL 语句中对应的加上 is_deleted 字段的逻辑，
+            is_deleted 字段在前文中也已经有详细的介绍，这里就不再赘述。-->
+<!--                <table tableName="tb_blog" domainObjectName="Blog"-->
+<!--                       enableCountByExample="true"-->
+<!--                       enableUpdateByExample="true"-->
+<!--                       enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">-->
+<!--                </table>-->
+
+<!--        <table tableName="tb_link" domainObjectName="BlogLink"-->
+<!--                       enableCountByExample="false"-->
+<!--                       enableUpdateByExample="false"-->
+<!--                       enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">-->
+<!--        </table>-->
+</generatorConfiguration>

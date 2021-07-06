@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.endsystem.dao.NodesMapper">
+  <resultMap id="BaseResultMap" type="com.endsystem.pojo.Nodes">
+    <id column="node_id" jdbcType="VARCHAR" property="id" />
+    <result column="x" jdbcType="INTEGER" property="x" />
+    <result column="y" jdbcType="INTEGER" property="y" />
+    <result column="label" jdbcType="VARCHAR" property="label" />
+    <result column="img" jdbcType="VARCHAR" property="img" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    node_id, x, y, label, img, type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from nodes
+    where node_id = #{nodeId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select * from nodes
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from nodes
+    where node_id = #{nodeId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.endsystem.pojo.Nodes">
+    insert into nodes (node_id, x, y, 
+      label, img, type)
+    values (#{nodeId,jdbcType=VARCHAR}, #{x,jdbcType=INTEGER}, #{y,jdbcType=INTEGER}, 
+      #{label,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.endsystem.pojo.Nodes">
+    insert into nodes
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="nodeId != null">
+        node_id,
+      </if>
+      <if test="x != null">
+        x,
+      </if>
+      <if test="y != null">
+        y,
+      </if>
+      <if test="label != null">
+        label,
+      </if>
+      <if test="img != null">
+        img,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="nodeId != null">
+        #{nodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="x != null">
+        #{x,jdbcType=INTEGER},
+      </if>
+      <if test="y != null">
+        #{y,jdbcType=INTEGER},
+      </if>
+      <if test="label != null">
+        #{label,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null">
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.endsystem.pojo.Nodes">
+    update nodes
+    <set>
+      <if test="x != null">
+        x = #{x,jdbcType=INTEGER},
+      </if>
+      <if test="y != null">
+        y = #{y,jdbcType=INTEGER},
+      </if>
+      <if test="label != null">
+        label = #{label,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null">
+        img = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where node_id = #{nodeId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.endsystem.pojo.Nodes">
+    update nodes
+    set x = #{x,jdbcType=INTEGER},
+      y = #{y,jdbcType=INTEGER},
+      label = #{label,jdbcType=VARCHAR},
+      img = #{img,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR}
+    where node_id = #{nodeId,jdbcType=VARCHAR}
+  </update>
+</mapper>

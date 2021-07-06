@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.endsystem.dao.ApInfoMapper">
+  <resultMap id="BaseResultMap" type="com.endsystem.pojo.ApInfo">
+    <result column="apId" jdbcType="VARCHAR" property="apid" />
+    <result column="apName" jdbcType="VARCHAR" property="apname" />
+    <result column="x" jdbcType="INTEGER" property="x" />
+    <result column="y" jdbcType="INTEGER" property="y" />
+    <result column="apMac" jdbcType="VARCHAR" property="apmac" />
+    <result column="stairs" jdbcType="VARCHAR" property="stairs" />
+  </resultMap>
+  <insert id="insert" parameterType="com.endsystem.pojo.ApInfo">
+    insert into apInfo (apId, apName, x, 
+      y, apMac, stairs)
+    values (#{apid,jdbcType=VARCHAR}, #{apname,jdbcType=VARCHAR}, #{x,jdbcType=INTEGER}, 
+      #{y,jdbcType=INTEGER}, #{apmac,jdbcType=VARCHAR}, #{stairs,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.endsystem.pojo.ApInfo">
+    insert into apInfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="apid != null">
+        apId,
+      </if>
+      <if test="apname != null">
+        apName,
+      </if>
+      <if test="x != null">
+        x,
+      </if>
+      <if test="y != null">
+        y,
+      </if>
+      <if test="apmac != null">
+        apMac,
+      </if>
+      <if test="stairs != null">
+        stairs,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="apid != null">
+        #{apid,jdbcType=VARCHAR},
+      </if>
+      <if test="apname != null">
+        #{apname,jdbcType=VARCHAR},
+      </if>
+      <if test="x != null">
+        #{x,jdbcType=INTEGER},
+      </if>
+      <if test="y != null">
+        #{y,jdbcType=INTEGER},
+      </if>
+      <if test="apmac != null">
+        #{apmac,jdbcType=VARCHAR},
+      </if>
+      <if test="stairs != null">
+        #{stairs,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="selectAllApInfo" resultMap="BaseResultMap">
+    select * from apInfo
+  </select>
+</mapper>

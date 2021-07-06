@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.endsystem.dao.SwitchDescMapper">
+  <resultMap id="BaseResultMap" type="com.endsystem.pojo.SwitchDesc">
+    <id column="switchId" jdbcType="VARCHAR" property="deviceid" />
+    <result column="switchName" jdbcType="VARCHAR" property="switchname" />
+    <result column="switchType" jdbcType="VARCHAR" property="switchtype" />
+    <result column="switchDuplex" jdbcType="VARCHAR" property="switchduplex" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    switchId, switchName, switchType, switchDuplex
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from switchDesc
+    where switchId = #{switchid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAllSwitch" resultMap="BaseResultMap">
+    select * from switchDesc
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from switchDesc
+    where switchId = #{switchid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.endsystem.pojo.SwitchDesc">
+    insert into switchDesc (switchId, switchName, switchType, 
+      switchDuplex)
+    values (#{switchid,jdbcType=VARCHAR}, #{switchname,jdbcType=VARCHAR}, #{switchtype,jdbcType=VARCHAR}, 
+      #{switchduplex,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.endsystem.pojo.SwitchDesc">
+    insert into switchDesc
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="switchid != null">
+        switchId,
+      </if>
+      <if test="switchname != null">
+        switchName,
+      </if>
+      <if test="switchtype != null">
+        switchType,
+      </if>
+      <if test="switchduplex != null">
+        switchDuplex,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="switchid != null">
+        #{switchid,jdbcType=VARCHAR},
+      </if>
+      <if test="switchname != null">
+        #{switchname,jdbcType=VARCHAR},
+      </if>
+      <if test="switchtype != null">
+        #{switchtype,jdbcType=VARCHAR},
+      </if>
+      <if test="switchduplex != null">
+        #{switchduplex,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.endsystem.pojo.SwitchDesc">
+    update switchDesc
+    <set>
+      <if test="switchname != null">
+        switchName = #{switchname,jdbcType=VARCHAR},
+      </if>
+      <if test="switchtype != null">
+        switchType = #{switchtype,jdbcType=VARCHAR},
+      </if>
+      <if test="switchduplex != null">
+        switchDuplex = #{switchduplex,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where switchId = #{switchid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.endsystem.pojo.SwitchDesc">
+    update switchDesc
+    set switchName = #{switchname,jdbcType=VARCHAR},
+      switchType = #{switchtype,jdbcType=VARCHAR},
+      switchDuplex = #{switchduplex,jdbcType=VARCHAR}
+    where switchId = #{switchid,jdbcType=VARCHAR}
+  </update>
+</mapper>

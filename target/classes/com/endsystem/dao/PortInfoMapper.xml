@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.endsystem.dao.PortInfoMapper">
+  <resultMap id="BaseResultMap" type="com.endsystem.pojo.PortInfo">
+    <result column="portId" jdbcType="VARCHAR" property="portid" />
+    <result column="portName" jdbcType="VARCHAR" property="portname" />
+    <result column="portStatus" jdbcType="VARCHAR" property="portstatus" />
+    <result column="portSpeed" jdbcType="VARCHAR" property="portspeed" />
+    <result column="portType" jdbcType="VARCHAR" property="porttype" />
+    <result column="VlanStatus" jdbcType="VARCHAR" property="vlanstatus" />
+    <result column="switchId" jdbcType="VARCHAR" property="switchid" />
+  </resultMap>
+  <insert id="insert" parameterType="com.endsystem.pojo.PortInfo">
+    insert into portInfo (portId, portName, portStatus, 
+      portSpeed, portType, VlanStatus, 
+      switchId)
+    values (#{portid,jdbcType=VARCHAR}, #{portname,jdbcType=VARCHAR}, #{portstatus,jdbcType=VARCHAR}, 
+      #{portspeed,jdbcType=VARCHAR}, #{porttype,jdbcType=VARCHAR}, #{vlanstatus,jdbcType=VARCHAR}, 
+      #{switchid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.endsystem.pojo.PortInfo">
+    insert into portInfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="portid != null">
+        portId,
+      </if>
+      <if test="portname != null">
+        portName,
+      </if>
+      <if test="portstatus != null">
+        portStatus,
+      </if>
+      <if test="portspeed != null">
+        portSpeed,
+      </if>
+      <if test="porttype != null">
+        portType,
+      </if>
+      <if test="vlanstatus != null">
+        VlanStatus,
+      </if>
+      <if test="switchid != null">
+        switchId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="portid != null">
+        #{portid,jdbcType=VARCHAR},
+      </if>
+      <if test="portname != null">
+        #{portname,jdbcType=VARCHAR},
+      </if>
+      <if test="portstatus != null">
+        #{portstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="portspeed != null">
+        #{portspeed,jdbcType=VARCHAR},
+      </if>
+      <if test="porttype != null">
+        #{porttype,jdbcType=VARCHAR},
+      </if>
+      <if test="vlanstatus != null">
+        #{vlanstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="switchid != null">
+        #{switchid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="selectPortBySwitchId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select * from portInfo where switchId = #{switchId}
+  </select>
+</mapper>

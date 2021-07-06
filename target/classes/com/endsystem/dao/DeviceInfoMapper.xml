@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.endsystem.dao.DeviceInfoMapper">
+  <resultMap id="BaseResultMap" type="com.endsystem.pojo.DeviceInfo">
+    <result column="deviceId" jdbcType="VARCHAR" property="deviceid" />
+    <result column="cpuRate" jdbcType="INTEGER" property="cpurate" />
+    <result column="IpAddr" jdbcType="VARCHAR" property="ipaddr" />
+    <result column="Mac" jdbcType="VARCHAR" property="mac" />
+    <result column="deviceStatus" jdbcType="VARCHAR" property="devicestatus" />
+    <result column="fanSpeed" jdbcType="INTEGER" property="fanspeed" />
+    <result column="deviceManufacturer" jdbcType="VARCHAR" property="devicemanufacturer" />
+  </resultMap>
+  <insert id="insert" parameterType="com.endsystem.pojo.DeviceInfo">
+    insert into deviceInfo (deviceId, cpuRate, IpAddr, 
+      Mac, deviceStatus, fanSpeed, 
+      deviceManufacturer)
+    values (#{deviceid,jdbcType=VARCHAR}, #{cpurate,jdbcType=INTEGER}, #{ipaddr,jdbcType=VARCHAR}, 
+      #{mac,jdbcType=VARCHAR}, #{devicestatus,jdbcType=VARCHAR}, #{fanspeed,jdbcType=INTEGER}, 
+      #{devicemanufacturer,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.endsystem.pojo.DeviceInfo">
+    insert into deviceInfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="deviceid != null">
+        deviceId,
+      </if>
+      <if test="cpurate != null">
+        cpuRate,
+      </if>
+      <if test="ipaddr != null">
+        IpAddr,
+      </if>
+      <if test="mac != null">
+        Mac,
+      </if>
+      <if test="devicestatus != null">
+        deviceStatus,
+      </if>
+      <if test="fanspeed != null">
+        fanSpeed,
+      </if>
+      <if test="devicemanufacturer != null">
+        deviceManufacturer,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="deviceid != null">
+        #{deviceid,jdbcType=VARCHAR},
+      </if>
+      <if test="cpurate != null">
+        #{cpurate,jdbcType=INTEGER},
+      </if>
+      <if test="ipaddr != null">
+        #{ipaddr,jdbcType=VARCHAR},
+      </if>
+      <if test="mac != null">
+        #{mac,jdbcType=VARCHAR},
+      </if>
+      <if test="devicestatus != null">
+        #{devicestatus,jdbcType=VARCHAR},
+      </if>
+      <if test="fanspeed != null">
+        #{fanspeed,jdbcType=INTEGER},
+      </if>
+      <if test="devicemanufacturer != null">
+        #{devicemanufacturer,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select * from deviceInfo
+  </select>
+</mapper>
