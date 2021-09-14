@@ -555,6 +555,7 @@
     <module>transport-blockhound-tests</module>
     <module>microbench</module>
     <module>bom</module>
+      <module>Test</module>
   </modules>
 
   <dependencyManagement>

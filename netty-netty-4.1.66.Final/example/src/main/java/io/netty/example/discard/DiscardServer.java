@@ -47,6 +47,9 @@ public final class DiscardServer {
             sslCtx = null;
         }
 
+        /**
+         *
+         */
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {

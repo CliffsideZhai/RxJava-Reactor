@@ -24,6 +24,7 @@
         <module name="netty-codec-http" />
         <module name="netty-testsuite-http2" />
         <module name="netty-codec-dns" />
+        <module name="Test" />
         <module name="netty-codec-redis" />
         <module name="netty-codec-socks" />
         <module name="netty-testsuite-native-image-client-runtime-init" />
@@ -56,6 +57,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="RxjavaDemo" options="-parameters" />
+      <module name="Test" options="-Xlint:-options" />
       <module name="netty-all" options="-Xlint:-options" />
       <module name="netty-buffer" options="-Xlint:-options" />
       <module name="netty-codec" options="-Xlint:-options" />
