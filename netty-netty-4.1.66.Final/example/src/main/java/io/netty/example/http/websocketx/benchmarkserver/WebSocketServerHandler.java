@@ -17,10 +17,7 @@ package io.netty.example.http.websocketx.benchmarkserver;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.*;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
@@ -111,7 +108,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 
         // Check for closing frame
         if (frame instanceof CloseWebSocketFrame) {
-            handshaker.close(ctx, (CloseWebSocketFrame) frame.retain());
+            handshaker.close((Channel) ctx, (CloseWebSocketFrame) frame.retain());
             return;
         }
         if (frame instanceof PingWebSocketFrame) {

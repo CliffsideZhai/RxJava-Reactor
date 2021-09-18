@@ -110,7 +110,7 @@ public class CompressorHttp2ConnectionEncoder extends DecoratingHttp2ConnectionE
                                             CompressionOptions... compressionOptionsArgs) {
         super(delegate);
         ObjectUtil.checkNotNull(compressionOptionsArgs, "CompressionOptions");
-        ObjectUtil.deepCheckNotNull("CompressionOptions", compressionOptionsArgs);
+        //ObjectUtil.deepCheckNotNull("CompressionOptions", compressionOptionsArgs);
 
         for (CompressionOptions compressionOptions : compressionOptionsArgs) {
             if (compressionOptions instanceof BrotliOptions) {

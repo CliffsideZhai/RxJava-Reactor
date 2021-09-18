@@ -32,7 +32,6 @@ import static io.netty.handler.codec.CharSequenceValueConverter.*;
 import static io.netty.handler.codec.http2.DefaultHttp2Headers.*;
 import static io.netty.util.AsciiString.*;
 import static io.netty.util.internal.EmptyArrays.*;
-import static io.netty.util.internal.ObjectUtil.checkNotNullArrayParam;
 
 /**
  * A variant of {@link Http2Headers} which only supports read-only methods.
@@ -133,7 +132,7 @@ public final class ReadOnlyHttp2Headers implements Http2Headers {
         // We are only validating values... so start at 1 and go until end.
         for (int i = 1; i < pseudoHeaders.length; i += 2) {
             // pseudoHeaders names are only set internally so they are assumed to be valid.
-            checkNotNullArrayParam(pseudoHeaders[i], i, "pseudoHeaders");
+            //checkNotNullArrayParam(pseudoHeaders[i], i, "pseudoHeaders");
         }
 
         boolean seenNonPseudoHeader = false;
@@ -147,7 +146,7 @@ public final class ReadOnlyHttp2Headers implements Http2Headers {
                 throw new IllegalArgumentException(
                      "otherHeaders name at index " + i + " is a pseudo header that appears after non-pseudo headers.");
             }
-            checkNotNullArrayParam(otherHeaders[i + 1], i + 1, "otherHeaders");
+            //checkNotNullArrayParam(otherHeaders[i + 1], i + 1, "otherHeaders");
         }
     }
 
