@@ -27,6 +27,17 @@ import java.nio.ByteBuffer;
 
 final class PooledDirectByteBuf extends PooledByteBuf<ByteBuffer> {
 
+    /**
+     * PooledDirectByteBuf在其类加载的过程中，
+     * 初始化了一个静态的RECYCLER 成员，
+     * 通过重写其newObject()方法达到使Recycler可以初始化一个PooledDirectByteBuf。
+     * 而在接下来的使用中，只需要通过静态方法newInstance()就可以从RECYCLER
+     * 对象池的get()方法获取一个新的PooledDirectByteBuf对象返回，
+     * 而重写的方法newObject()中的入参Handler则提供了recycle()方法给出了对象重新放入池中回收的能力，
+     * 这里的具体实现在下文展开。因此，newInstance()方法和recycle()方法就提供了对象池出池和入池的能力，
+     * 也通过此，PooledDirectByteBuf达到了池化的目标。
+     * ————————————————
+     */
     private static final ObjectPool<PooledDirectByteBuf> RECYCLER = ObjectPool.newPool(
             new ObjectCreator<PooledDirectByteBuf>() {
         @Override

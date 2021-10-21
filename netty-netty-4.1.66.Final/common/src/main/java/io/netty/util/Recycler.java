@@ -34,8 +34,21 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 /**
+ * @link:{https://blog.csdn.net/weixin_40318210/article/details/108569207}
  * Light-weight object pool based on a thread-local stack.
+ * Recycler是Netty中基于ThreadLocal的轻量化的对象池实现。
+ * 既然是基于ThreadLocal，那么就可以将其理解为当前线程在通过对象池Recycler得到一个对象之后，
+ * 在回收对象的时候，不需要将其销毁，而是放回到该线程的对象池中即可，
+ * 在该线程下一次用到该对象的时候，不需要重新申请空间创建，而是直接重新从对象池中获取。
  *
+ *
+ * Recycler在netty中被如何使用 ?
+ * Recycler对象池在netty中最重要的使用，
+ * 就在于netty的池化ByteBuf的场景下。首先，何为池化？
+ * 以PooledDirectByteBuf举例，每一个PooledDirectByteBuf在应用线程中使用完毕之后，
+ * 并不会被释放，而是等待被重新利用，类比线程池每个线程在执行完毕之后不会被立即释放，
+ * 而是等待下一次执行的时候被重新利用。所谓的对象池也是如此，池化减少了ByteBuf创建和销毁的开销，也是netty高性能表现的基石之一。
+ * ————————————————
  * @param <T> the type of the pooled object
  */
 public abstract class Recycler<T> {
@@ -115,6 +128,7 @@ public abstract class Recycler<T> {
     private final int maxDelayedQueuesPerThread;
     private final int delayedQueueInterval;
 
+    // 第一个 成员 顾名思义，这个Stack主体是一个堆栈，但是其还维护着一个链表，而链表中的每一个节点都是一个队列。
     private final FastThreadLocal<Stack<T>> threadLocal = new FastThreadLocal<Stack<T>>() {
         @Override
         protected Stack<T> initialValue() {
@@ -252,6 +266,19 @@ public abstract class Recycler<T> {
         }
     }
 
+    /**
+     * 第二个成员是在Recycler中也是通过ThreadLocal所实现的一个线程本地变量，DELAYED_RECYCLED ，是一个Stack和队列的映射Map。
+     * 第二个成员DELAYED_RECYCLED 可以通过上文的Stack获取一个队列。
+     * 在前一个成员的解释中提到，当别的线程调用另一个线程的对象池的recycle()方法进行回收的时候，
+     * 并不会直接落到持有对象池的线程的Stack数组当中，当然原因也很简单，
+     * 在并发情况下这样的操作显然是线程不安全的，而加锁也会带来性能的开销。因此，netty在Recycler对象池中通过更巧妙的方式解决这一问题。
+     * ///
+     * 在前面提到，除了数组，Stack还持有了一系列队列的组成的链表，
+     * 这些链表中的每一个节点都是一个队列，这些队列又存放着别的线程所回收到当前线程对象池的对象。
+     * 那么，这些队列就是各个线程针对持有对象池的专属回收队列，说起来很拗口，看下面的代码。
+     * ————————————————
+     *
+     */
     private static final FastThreadLocal<Map<Stack<?>, WeakOrderQueue>> DELAYED_RECYCLED =
             new FastThreadLocal<Map<Stack<?>, WeakOrderQueue>>() {
         @Override
@@ -266,6 +293,17 @@ public abstract class Recycler<T> {
 
         static final WeakOrderQueue DUMMY = new WeakOrderQueue();
 
+        /**
+         *  elements：elements数组便是存放当前线程被回收的对象，
+         *  当当前线程从该线程的Recycler对象池尝试获取新的对象的时候，
+         *  首先就会从当前Stack的这个数组中尝试获取已经在先前被创建并且在当前线程被回收的对象，
+         *  因为当对象池的对象在当前线程被调用recycle()的时候，是会直接放到elements数组中等待下一次的利用。
+         *  那么问题来了，如果从该线程中被申请的这个对象是在另外一个线程中被调用recycle()方法回收呢？
+         *  那么该对象就会处于链表中的队列中，当堆栈数组中的对象不存在的时候，
+         *  将会尝试把链表队列中的对象转移到数组中供当前线程获取。
+         *  那么其他线程是如何把被回收的对象放到这些链表中的队列的呢？接下来就是另一个成员的使命了。
+         * ————————————————
+         */
         // Let Link extend AtomicInteger for intrinsics. The Link itself will be used as writerIndex.
         @SuppressWarnings("serial")
         static final class Link extends AtomicInteger {
@@ -349,6 +387,15 @@ public abstract class Recycler<T> {
             interval = 0;
         }
 
+        /**
+         * 如果在操作中，队列是被创建的，
+         * 会把该队列放置在Stack中的链表里的头结点，
+         * 保证创建该对象的线程在数组空了之后能够通过链表访问到该队列并将该队列中的回收对象重新放到数组中等待被下次重新利用，
+         * 队列交给A线程的链表是唯一的阻塞操作。在这里通过一次阻塞操作，避免后续都不存在资源的竞争问题。
+         * ————————————————
+         * @param stack
+         * @param thread
+         */
         private WeakOrderQueue(Stack<?> stack, Thread thread) {
             super(thread);
             tail = new Link();
@@ -502,6 +549,10 @@ public abstract class Recycler<T> {
         }
     }
 
+    /**
+     * Recycler中，最核心的是两个通过ThreadLocal作为本地线程私有的两个成员，而其实现原理只需要围绕这两个成员分析，就可以对对象池的设计有直接的理解和认识。
+     * @param <T>
+     */
     private static final class Stack<T> {
 
         // we keep a queue of per-thread queues, which is appended to once only, each time a new thread other
@@ -688,12 +739,23 @@ public abstract class Recycler<T> {
             this.size = size + 1;
         }
 
+        /**
+         * pushLater()方法发生在当一个对象被回收的时候，
+         * 当当前线程不是这个对象所申请的时候的线程时，
+         * 将会通过该对象的Stack直接去通过DELAYED_RECYCLED 映射到一条队列上，
+         * 如果没有则创建并建立映射，再把该对象放入到该队列中，以上操作结束后该次回收即宣告结束
+         * @param item
+         * @param thread
+         */
         private void pushLater(DefaultHandle<?> item, Thread thread) {
             if (maxDelayedQueues == 0) {
                 // We don't support recycling across threads and should just drop the item on the floor.
                 return;
             }
 
+            /**
+             *
+             */
             // we don't want to have a ref to the queue as the value in our weak map
             // so we null it out; to ensure there are no races with restoring it later
             // we impose a memory ordering here (no-op on x86)
